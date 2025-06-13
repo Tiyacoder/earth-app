@@ -1,18 +1,21 @@
 import React from 'react';
-import { Card, Button, Col } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
+import { useCart } from '../context/CartContext';
 
-function ProductCard({ image, title, price }) {
+function ProductCard({ id, title, price, image }) {
+  const { addToCart } = useCart();
+
   return (
-    <Col md={4} className="mb-4">
-      <Card className="product-card">
-        <Card.Img variant="top" src={image} className="product-image" />
-        <Card.Body>
-          <Card.Title>{title}</Card.Title>
-          <Card.Text>${price}</Card.Text>
-          <Button variant="success">Add to Cart</Button>
-        </Card.Body>
-      </Card>
-    </Col>
+    <Card style={{ width: '18rem' }} className="m-3">
+      <Card.Img variant="top" src={image} />
+      <Card.Body>
+        <Card.Title>{title}</Card.Title>
+        <Card.Text>${price}</Card.Text>
+        <Button variant="success" onClick={() => addToCart({ id, title, price, image })}>
+          Add to Cart
+        </Button>
+      </Card.Body>
+    </Card>
   );
 }
 

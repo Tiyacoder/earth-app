@@ -1,37 +1,40 @@
-import React, { useContext } from 'react';
-import { CartContext } from '../context/CartContext';
-import { Button, Container, Row, Col, Card } from 'react-bootstrap';
+import React from 'react';
+import { Container, Table } from 'react-bootstrap';
+import { useCart } from '../context/CartContext'; // ✅ Import the context
 
 function Cart() {
-  const { cartItems, removeFromCart, totalPrice, clearCart } = useContext(CartContext);
+  const { cartItems } = useCart(); // ✅ Use context here
+
+  const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   return (
-    <Container className="my-5">
-      <h2>Your Cart</h2>
+    <Container style={{ padding: '4rem 0' }}>
+      <h2 className="text-center mb-4">Your Cart</h2>
       {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <>
-          <Row>
-            {cartItems.map((item, index) => (
-              <Col md={4} key={index} className="mb-4">
-                <Card>
-                  <Card.Img variant="top" src={item.image} height="200px" />
-                  <Card.Body>
-                    <Card.Title>{item.title}</Card.Title>
-                    <Card.Text>₹ {item.price}</Card.Text>
-                    <Button variant="danger" onClick={() => removeFromCart(item.id)}>
-                      Remove
-                    </Button>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-          <h4>Total: ₹ {totalPrice}</h4>
-          <Button variant="secondary" onClick={clearCart}>
-            Clear Cart
-          </Button>
+          <Table striped bordered hover responsive>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Price</th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              {cartItems.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.title}</td>
+                  <td>{item.quantity}</td>
+                  <td>${item.price}</td>
+                 
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <h4 className="text-end">Total: ${total.toFixed(2)}</h4>
         </>
       )}
     </Container>
