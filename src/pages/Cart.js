@@ -1,9 +1,9 @@
 import React from 'react';
-import { Container, Table } from 'react-bootstrap';
-import { useCart } from '../context/CartContext'; // ✅ Import the context
+import { Container, Table, Button } from 'react-bootstrap';
+import { useCart } from '../context/CartContext';
 
 function Cart() {
-  const { cartItems } = useCart(); // ✅ Use context here
+  const { cartItems, removeFromCart } = useCart(); // ✅ use removeFromCart
 
   const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
@@ -20,7 +20,8 @@ function Cart() {
                 <th>Product</th>
                 <th>Qty</th>
                 <th>Price</th>
-                
+               
+                <th>Action</th> {/* ✅ New column */}
               </tr>
             </thead>
             <tbody>
@@ -29,7 +30,16 @@ function Cart() {
                   <td>{item.title}</td>
                   <td>{item.quantity}</td>
                   <td>${item.price}</td>
-                 
+                  
+                  <td>
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={() => removeFromCart(item.id)}
+                    >
+                      Remove
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
